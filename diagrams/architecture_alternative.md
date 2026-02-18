@@ -9,14 +9,10 @@ graph TD
         APIGateway
         OrderService
         OrderDB
-        UserService
-        UserDB
-
-        subgraph PaymentZone ["Payment zone"]
-            style PaymentZone fill:#006B3C,stroke:#4A90E2,stroke-width:2px
-            PaymentService
-            PaymentDB
-        end
+        CustomerService
+        CustomerDB
+        SellerService
+        SellerDB
 
         CatalogService
         ProductDB
@@ -25,23 +21,21 @@ graph TD
     end
 
     %% Relations
-    APIGateway --> |sync| PaymentService
-    PaymentService --> |async, when order needs to be paid| OrderService
-
     Customer --> APIGateway
     Seller --> APIGateway
 
-    APIGateway --> |sync| UserService
-    UserService --> |sync| CatalogService
-    UserService --> |sync| OrderService
+    APIGateway --> |sync| CustomerService
+    APIGateway --> |sync| SellerService
+    SellerService --> |sync| CatalogService
+    CustomerService --> |sync| OrderService
     OrderService --> |sync| CatalogService
-    UserService --> |sync| IndividualService
+    CustomerService --> |sync| IndividualService
 
     IndividualService --> |async, when order is created or status has been changed| OrderService
 
-    PaymentService --> PaymentDB
     IndividualService --> IndividualDB
-    UserService --> UserDB
+    CustomerService --> CustomerDB
+    SellerService --> SellerDB
     CatalogService --> ProductDB
     OrderService --> OrderDB
 ```
