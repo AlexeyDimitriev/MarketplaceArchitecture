@@ -18,6 +18,8 @@ graph TD
         ProductDB
         IndividualService
         IndividualDB
+
+        Broker
     end
 
     %% Relations
@@ -31,7 +33,8 @@ graph TD
     OrderService --> |sync| CatalogService
     CustomerService --> |sync| IndividualService
 
-    IndividualService --> |async, when order is created or status has been changed| OrderService
+    IndividualService --> |sync| Broker
+    Broker --> |async, when order is created or status has been changed| OrderService
 
     IndividualService --> IndividualDB
     CustomerService --> CustomerDB
