@@ -20,27 +20,35 @@ graph TD
 
         CatalogService
         ProductDB
-        IndividualService
-        IndividualDB
+        FeedService
+        FeedDB
+        NotificationsService
+        NotificationsDB
+
+        Broker
     end
 
     %% Relations
-    APIGateway --> |sync| PaymentService
-    PaymentService --> |async, when order needs to be paid| OrderService
-
     Customer --> APIGateway
     Seller --> APIGateway
 
+    APIGateway --> |sync| PaymentService
     APIGateway --> |sync| UserService
-    UserService --> |sync| CatalogService
-    UserService --> |sync| OrderService
-    OrderService --> |sync| CatalogService
-    UserService --> |sync| IndividualService
+    APIGateway --> |sync| OrderService
+    APIGateway --> |sync| FeedService
+    APIGateway --> |sync| NotificationsService
 
-    IndividualService --> |async, when order is created or status has been changed| OrderService
+    UserService --> |sync| CatalogService
+    OrderService --> |sync| CatalogService
+
+    PaymentService --> |sync| Broker
+    NotificationsService --> |sync| Broker
+
+    Broker --> |async, when order is created or it's status has been changed| OrderService
 
     PaymentService --> PaymentDB
-    IndividualService --> IndividualDB
+    FeedService --> FeedDB
+    NotificationsService --> NotificationsDB
     UserService --> UserDB
     CatalogService --> ProductDB
     OrderService --> OrderDB
